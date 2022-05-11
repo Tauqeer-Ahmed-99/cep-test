@@ -3,7 +3,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 
 import Typography from "@mui/material/Typography";
-import { FormControlLabel, Grid, Radio } from "@mui/material";
+import { Box, FormControlLabel, Grid, Radio } from "@mui/material";
+import { useState } from "react";
+import { Edit } from "@material-ui/icons";
 
 interface addressGridProps {
   id: string;
@@ -42,9 +44,22 @@ function AddressCard(props: addressGridProps) {
         )}
         <Grid item xs={10}>
           <CardContent>
-            <Typography variant="h5" component="div">
-              {props.companyName}
-            </Typography>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              sx={{ width: "100%" }}
+            >
+              <Typography variant="h5" component="div">
+                {props.companyName}
+              </Typography>
+              {props.id === props.selectedAddress ? (
+                <Box sx={{ cursor: "pointer" }}>
+                  <Edit color="action" />
+                </Box>
+              ) : (
+                ""
+              )}
+            </Box>
             <Typography
               sx={{ fontSize: 14 }}
               color="text.secondary"
