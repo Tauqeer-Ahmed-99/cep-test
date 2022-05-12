@@ -1,4 +1,5 @@
-import AddressGrid from "./components/AddressGrid";
+import { useState } from "react";
+import ItemGrid from "./components/ItemGrid";
 import StyledStepper from "./components/StyledStepper";
 
 const dummyData = [
@@ -58,11 +59,29 @@ const dummyData = [
   },
 ];
 
+type ItemType = {
+  id: string;
+  companyName: string;
+  sellerName: string;
+  contact: string;
+  email: string;
+  address: string;
+};
+
 function App() {
+  const [selectedAddress, setAddress] = useState({} as ItemType);
+
   return (
     <>
       <StyledStepper activePage={1} />
-      <AddressGrid data={dummyData} />
+      <ItemGrid
+        data={dummyData}
+        name={"End User"}
+        defaultSelectedItem={selectedAddress}
+        setItem={setAddress}
+        buttonVariant="text"
+        buttonSize="small"
+      />
     </>
   );
 }

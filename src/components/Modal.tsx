@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -13,17 +13,13 @@ import {
   FormControl,
   Grid,
   InputAdornment,
-  makeStyles,
-  MenuItem,
   RadioGroup,
-  Select,
-  SelectChangeEvent,
   styled,
   TextField,
 } from "@mui/material";
-import { margin } from "@mui/system";
-import AddressCard from "./AddressCard";
-import { Add, Close, PlusOneSharp, Search } from "@material-ui/icons";
+
+import ItemCard from "./ItemCard";
+import { Add, Close, Search } from "@material-ui/icons";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -37,32 +33,35 @@ const Transition = React.forwardRef(function Transition(
 interface propsInterface {
   onSave: any;
   onSelect: any;
-  selectedAddress: string;
+  selectedItem: string;
   data: any;
+  name: string;
+  buttonVariant: "contained" | "outlined" | "text" | undefined;
+  buttonSize: "small" | "medium" | "large" | undefined;
 }
 
 function Modal(props: propsInterface) {
   const [open, setOpen] = useState(false);
   // const [searchTerm, setSearchTerm] = useState("company");
   const [userInput, setUserInput] = useState("");
-  const [selectedId, setId] = useState(props.selectedAddress);
-  const [filteredAddresses, setFilteredAddressData]: any = useState(props.data);
+  const [selectedId, setId] = useState(props.selectedItem);
+  const [filteredData, setFilteredData]: any = useState(props.data);
 
   const handleSearch = (event: any) => {
     const userInput = event.target.value.trim().toLowerCase();
     if (userInput) {
       setUserInput(userInput);
-      filterAddress(userInput);
+      filterData(userInput);
     }
     if (!userInput) {
       setUserInput(userInput);
-      setFilteredAddressData(props.data);
+      setFilteredData(props.data);
     }
   };
 
-  const filterAddress = (userInput: string) => {
-    const filteredAddresses = props.data.filter((address: any) => {
-      const value = Object.values(address);
+  const filterData = (userInput: string) => {
+    const filteredData = props.data.filter((item: any) => {
+      const value = Object.values(item);
       const v = value.map((item: any) => item.toLowerCase().trim());
       if (v.findIndex((element) => element.includes(userInput)) >= 0) {
         return true;
@@ -70,7 +69,7 @@ function Modal(props: propsInterface) {
         return false;
       }
     });
-    setFilteredAddressData(filteredAddresses);
+    setFilteredData(filteredData);
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -88,12 +87,12 @@ function Modal(props: propsInterface) {
     handleClose();
     props.onSave(selectedId);
     console.log(selectedId);
-    setFilteredAddressData(props.data);
+    setFilteredData(props.data);
   };
 
   const close = () => {
-    console.log("" + props.selectedAddress);
-    setId(props.selectedAddress);
+    console.log("" + props.selectedItem);
+    setId(props.selectedItem);
     handleClose();
   };
 
@@ -103,7 +102,7 @@ function Modal(props: propsInterface) {
 
   const onCrossClick = () => {
     setUserInput("");
-    setFilteredAddressData(props.data);
+    setFilteredData(props.data);
   };
   const BottomMarginContainer = styled("div")(({ theme }) => {
     return { marginBottom: "30px", marginTop: "10px" };
@@ -112,8 +111,12 @@ function Modal(props: propsInterface) {
   return (
     <div>
       <BottomMarginContainer>
-        <Button variant="contained" onClick={handleClickOpen}>
-          Show End User
+        <Button
+          variant={props.buttonVariant}
+          size={props.buttonSize}
+          onClick={handleClickOpen}
+        >
+          Show {props.name}
         </Button>
       </BottomMarginContainer>
       <Dialog
@@ -179,7 +182,7 @@ function Modal(props: propsInterface) {
               />{" "}
               <Button
                 onClick={() => {
-                  filterAddress(userInput);
+                  filterData(userInput);
                 }}
                 variant="outlined"
                 sx={{ marginLeft: "15px" }}
@@ -198,7 +201,7 @@ function Modal(props: propsInterface) {
               <Button sx={{ marginLeft: "8px" }}>
                 <Add />{" "}
                 <span style={{ marginTop: "3px", marginLeft: "4px" }}>
-                  Add end user
+                  Add {props.name}
                 </span>
               </Button>
             </Box>
@@ -206,7 +209,7 @@ function Modal(props: propsInterface) {
           <FormControl>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
-              name="address"
+              name={props.name}
               onChange={handleOnChange}
             >
               <Grid
@@ -217,17 +220,17 @@ function Modal(props: propsInterface) {
                 justifyContent="center"
                 alignItems="center"
               >
-                {filteredAddresses.map((address: any) => {
+                {filteredData.map((item: any) => {
                   return (
-                    <Grid item xs={2} sm={4} md={4} key={address.id}>
-                      <AddressCard
-                        id={address.id}
-                        companyName={address.companyName}
-                        sellerName={address.sellerName}
-                        contact={address.contact}
-                        email={address.email}
-                        address={address.address}
-                        selectedAddress={selectedId}
+                    <Grid item xs={2} sm={4} md={4} key={item.id}>
+                      <ItemCard
+                        id={item.id}
+                        companyName={item.companyName}
+                        sellerName={item.sellerName}
+                        contact={item.contact}
+                        email={item.email}
+                        address={item.address}
+                        selectedItem={selectedId}
                       />
                     </Grid>
                   );

@@ -1,27 +1,24 @@
 import Card from "@mui/material/Card";
-
 import CardContent from "@mui/material/CardContent";
-
 import Typography from "@mui/material/Typography";
 import { Box, FormControlLabel, Grid, Radio } from "@mui/material";
-import { useState } from "react";
 import { Edit } from "@material-ui/icons";
 
-interface addressGridProps {
+interface itemGridProps {
   id: string;
   companyName: string;
   sellerName: string;
   contact: string;
   email: string;
   address: string;
-  selectedAddress: string | null;
+  selectedItem: string | null;
 }
 
-function AddressCard(props: addressGridProps) {
+function ItemCard(props: itemGridProps) {
   return (
     <Card>
       <Grid container justifyContent="center" alignItems="center">
-        {props.selectedAddress != null ? (
+        {props.selectedItem != null ? (
           <Grid
             item
             xs={2}
@@ -36,7 +33,7 @@ function AddressCard(props: addressGridProps) {
               value={props.id}
               control={<Radio />}
               label={false}
-              checked={props.id === props.selectedAddress}
+              checked={props.id === props.selectedItem}
             />
           </Grid>
         ) : (
@@ -52,7 +49,7 @@ function AddressCard(props: addressGridProps) {
               <Typography variant="h5" component="div">
                 {props.companyName}
               </Typography>
-              {props.id === props.selectedAddress ? (
+              {props.id === props.selectedItem ? (
                 <Box sx={{ cursor: "pointer" }}>
                   <Edit color="action" />
                 </Box>
@@ -79,4 +76,4 @@ function AddressCard(props: addressGridProps) {
   );
 }
 
-export default AddressCard;
+export default ItemCard;
